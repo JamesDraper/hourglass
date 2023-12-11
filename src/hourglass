@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+require ($_composer_autoload_path ?? (__DIR__ . '/../vendor/autoload.php'));
+
+use Symfony\Component\Console\SingleCommandApplication;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+
+(new SingleCommandApplication())
+    ->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
+    ->addOption('bar', null, InputOption::VALUE_REQUIRED)
+    ->setCode(function (InputInterface $input, OutputInterface $output): int {
+        // todo: finish this.
+
+        $output->writeln('Hello world.');
+
+        return 0;
+    })
+    ->run();
