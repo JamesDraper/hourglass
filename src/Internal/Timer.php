@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hourglass;
+namespace Hourglass\Internal;
 
 use Closure;
 

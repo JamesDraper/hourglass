@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Internal;
 
-use Hourglass\Moment;
+use Hourglass\Internal\Moment;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
