@@ -1,7 +1,8 @@
 {
     "autoload": {
+        "files": ["src/helper.php"],
         "psr-4": {
-            "Hourglass\\": "src"
+            "Hourglass\\": "src/classes"
         }
     },
     "autoload-dev": {
