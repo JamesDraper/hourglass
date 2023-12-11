@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Hourglass\Internal;
+namespace Hourglass\Internal\Timer;
 
 class Moment
 {

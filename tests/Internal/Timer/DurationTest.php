@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal;
+namespace Tests\Internal\Timer;
 
-use Hourglass\Internal\Duration;
-use Hourglass\Internal\Moment;
+use Hourglass\Internal\Timer\Duration;
+use Hourglass\Internal\Timer\Moment;
 
 use Mockery\MockInterface;
 use Mockery;

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal;
+namespace Tests\Internal\Timer;
 
-use Hourglass\Internal\Timer;
+use Hourglass\Internal\Timer\Timer;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
