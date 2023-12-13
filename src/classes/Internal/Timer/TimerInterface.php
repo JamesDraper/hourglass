@@ -6,6 +6,8 @@ use Closure;
 
 interface TimerInterface
 {
+    public static function make(): self;
+
     /**
      * @param Closure(): void $benchmark
      * @return string the time taken in nanoseconds.

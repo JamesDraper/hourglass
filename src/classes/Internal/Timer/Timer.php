@@ -5,8 +5,13 @@ namespace Hourglass\Internal\Timer;
 
 use Closure;
 
-final class Timer
+final class Timer implements TimerInterface
 {
+    public static function make(): self
+    {
+        return new self();
+    }
+
     public function __invoke(Closure $benchmark, int $perRun): string
     {
         $before = hrtime();

@@ -5,6 +5,9 @@ namespace Hourglass\Internal;
 
 use Hourglass\Internal\Timer\TimerInterface;
 use Hourglass\Exception\GeneralException;
+use Hourglass\Exception\ConfigException;
+use Hourglass\Internal\Timer\Timer;
+use Hourglass\Benchmark;
 
 use Throwable;
 use Closure;
@@ -18,6 +21,56 @@ use function rtrim;
 class Calculator
 {
     private const PRECISION = 10;
+
+    /**
+     * @throws GeneralException
+     * @throws ConfigException
+     */
+    public static function runBenchmark(Benchmark $benchmark): string
+    {
+        $validator = Validator::make();
+
+        $averageOf = $benchmark->averageOf();
+        $perRun = $benchmark->perRun();
+
+        $validator->validateAverageOf($averageOf);
+        $validator->validatePerRun($perRun);
+
+        $calculator = self::make();
+
+        return $calculator(
+            static function () use ($benchmark): void {
+                $benchmark->benchmark();
+            },
+            static function () use ($benchmark): void {
+                $benchmark->beforeAll();
+            },
+            static function () use ($benchmark): void {
+                $benchmark->afterAll();
+            },
+            static function () use ($benchmark): void {
+                $benchmark->beforeEach();
+            },
+            static function () use ($benchmark): void {
+                $benchmark->afterEach();
+            },
+            $averageOf,
+            $perRun,
+        );
+    }
+
+    private static function make(): self
+    {
+        static $instance = null;
+
+        if (is_null($instance)) {
+            $timer = Timer::make();
+
+            $instance = new self($timer);
+        }
+
+        return $instance;
+    }
 
     public function __construct(private readonly TimerInterface $timer)
     {
