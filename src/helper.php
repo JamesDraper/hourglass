@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-function hourglass(): void
-{
-    // todo: finish this.
+use Hourglass\Builder;
 
-    sleep(1);
+function hourglass(): Builder
+{
+    return Builder::make();
 }

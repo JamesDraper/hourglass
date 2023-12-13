@@ -13,6 +13,17 @@ use function sprintf;
 
 class Validator
 {
+    public static function make(): self
+    {
+        static $instance = null;
+
+        if (is_null($instance)) {
+            $instance = new self;
+        }
+
+        return $instance;
+    }
+
     /**
      * @param Closure(): void $benchmark
      * @throws ConfigException

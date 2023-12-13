@@ -10,9 +10,9 @@ use Closure;
 class Config
 {
     /**
-     * @var Closure(): void
+     * @var Closure(): void|null
      */
-    private Closure $benchmark;
+    private ?Closure $benchmark = null;
 
     /**
      * @var Closure(): void|null
@@ -38,6 +38,13 @@ class Config
 
     private int $perRun = BenchmarkInterface::DEFAULT_PER_RUN;
 
+    public static function make(): self
+    {
+        $validator = Validator::make();
+
+        return new self($validator);
+    }
+
     public function __construct(private readonly Validator $validator)
     {
     }
@@ -56,7 +63,7 @@ class Config
     /**
      * @return Closure(): void
      */
-    public function getBenchmark(): Closure
+    public function getBenchmark(): ?Closure
     {
         return $this->benchmark;
     }

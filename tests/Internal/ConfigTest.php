@@ -22,6 +22,31 @@ class ConfigTest extends TestCase
     private Config $config;
 
     #[Test]
+    public function benchmarkDefault(): void
+    {
+        // Assert that benchmark defaults to null.
+
+        $this->assertNull($this->config->getBenchmark());
+    }
+
+    #[Test]
+    public function benchmarkCanBeSet(): void
+    {
+        // Assert that benchmark can be set and calls the validator.
+
+        $closure = $this->closure();
+
+        $this
+            ->validator
+            ->expects()
+            ->validateBenchmark($closure);
+
+        $this->config->setBenchmark($closure);
+
+        $this->assertSame($closure, $this->config->getBenchmark());
+    }
+
+    #[Test]
     public function beforeAllDefault(): void
     {
         // Assert that beforeAll defaults to null.
