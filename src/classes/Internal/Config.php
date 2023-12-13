@@ -5,10 +5,7 @@ namespace Hourglass\Internal;
 
 use Hourglass\Exception\ConfigException;
 
-use ReflectionFunction;
 use Closure;
-
-use function is_null;
 
 class Config
 {
@@ -41,11 +38,18 @@ class Config
 
     private int $perRun = BenchmarkInterface::DEFAULT_PER_RUN;
 
+    public function __construct(private readonly Validator $validator)
+    {
+    }
+
     /**
      * @param Closure(): void $benchmark
+     * @throws ConfigException
      */
     public function setBenchmark(Closure $benchmark): void
     {
+        $this->validator->validateBenchmark($benchmark);
+
         $this->benchmark = $benchmark;
     }
 
@@ -63,7 +67,7 @@ class Config
      */
     public function setBeforeAll(?Closure $beforeAll): void
     {
-        $this->assertNullableClosure($beforeAll, 'beforeAll');
+        $this->validator->validateBeforeAll($beforeAll);
 
         $this->beforeAll = $beforeAll;
     }
@@ -82,7 +86,7 @@ class Config
      */
     public function setAfterAll(?Closure $afterAll): void
     {
-        $this->assertNullableClosure($afterAll, 'afterAll');
+        $this->validator->validateAfterAll($afterAll);
 
         $this->afterAll = $afterAll;
     }
@@ -101,7 +105,7 @@ class Config
      */
     public function setBeforeEach(?Closure $beforeEach): void
     {
-        $this->assertNullableClosure($beforeEach, 'beforeEach');
+        $this->validator->validateBeforeEach($beforeEach);
 
         $this->beforeEach = $beforeEach;
     }
@@ -120,7 +124,7 @@ class Config
      */
     public function setAfterEach(?Closure $afterEach): void
     {
-        $this->assertNullableClosure($afterEach, 'afterEach');
+        $this->validator->validateAfterEach($afterEach);
 
         $this->afterEach = $afterEach;
     }
@@ -138,7 +142,7 @@ class Config
      */
     public function setAverageOf(int $averageOf): void
     {
-        $this->assertPositiveInt($averageOf, 'averageOf');
+        $this->validator->validateAverageOf($averageOf);
 
         $this->averageOf = $averageOf;
     }
@@ -153,7 +157,7 @@ class Config
      */
     public function setPerRun(int $perRun): void
     {
-        $this->assertPositiveInt($perRun, 'perRun');
+        $this->validator->validatePerRun($perRun);
 
         $this->perRun = $perRun;
     }
@@ -161,40 +165,5 @@ class Config
     public function getPerRun(): int
     {
         return $this->perRun;
-    }
-
-    /**
-     * @param Closure(): void|null $closure
-     * @throws ConfigException
-     */
-    private function assertNullableClosure(?Closure $closure, string $name): void
-    {
-        if (!is_null($closure)) {
-            $this->assertClosure($closure, $name);
-        }
-    }
-
-    /**
-     * @param Closure(): void $closure
-     * @throws ConfigException
-     */
-    private function assertClosure(Closure $closure, string $name): void
-    {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $reflection = new ReflectionFunction($closure);
-
-        if ($reflection->getParameters()) {
-            throw new ConfigException(sprintf('%s(): cannot have any parameters.', $name));
-        }
-    }
-
-    /**
-     * @throws ConfigException
-     */
-    private function assertPositiveInt(int $i, string $name): void
-    {
-        if ($i < 1) {
-            throw new ConfigException(sprintf('%s(): cannot be less than 1.', $name));
-        }
     }
 }

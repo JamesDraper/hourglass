@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Tests\Internal;
 
 use Hourglass\Internal\BenchmarkInterface;
-use Hourglass\Exception\ConfigException;
+use Hourglass\Internal\Validator;
 use Hourglass\Internal\Config;
 
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Depends;
+use Mockery\MockInterface;
+use Mockery;
+
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -16,6 +17,8 @@ use Closure;
 
 class ConfigTest extends TestCase
 {
+    private MockInterface&Validator $validator;
+
     private Config $config;
 
     #[Test]
@@ -27,43 +30,20 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[Depends('beforeAllDefault')]
-    public function beforeAllSucceedsWithClosure(): void
+    public function beforeAllCanBeSet(): void
     {
-        // Assert that beforeAll can be set using a valid closure.
+        // Assert that beforeAll can be set and calls the validator.
 
-        $closure = $this->goodClosure();
+        $closure = $this->closure();
+
+        $this
+            ->validator
+            ->expects()
+            ->validateBeforeAll($closure);
 
         $this->config->setBeforeAll($closure);
 
         $this->assertSame($closure, $this->config->getBeforeAll());
-    }
-
-    #[Test]
-    #[Depends('beforeAllSucceedsWithClosure')]
-    public function beforeAllSucceedsWithNull(): void
-    {
-        // Assert that beforeAll can be set using a valid closure.
-
-        $closure = $this->goodClosure();
-
-        $this->config->setBeforeAll($closure);
-        $this->config->setBeforeAll(null);
-
-        $this->assertNull($this->config->getBeforeAll());
-    }
-
-    #[Test]
-    #[DataProvider('providerBadClosures')]
-    #[Depends('beforeAllSucceedsWithClosure')]
-    public function beforeAllFails(Closure $closure): void
-    {
-        // Assert that beforeAll fails if provided with an invalid closure.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('beforeAll(): cannot have any parameters.');
-
-        $this->config->setBeforeAll($closure);
     }
 
     #[Test]
@@ -75,43 +55,20 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[Depends('afterAllDefault')]
-    public function afterAllSucceedsWithClosure(): void
+    public function afterAllCanBeSet(): void
     {
-        // Assert that afterAll can be set using a valid closure.
+        // Assert that afterAll can be set and calls the validator.
 
-        $closure = $this->goodClosure();
+        $closure = $this->closure();
+
+        $this
+            ->validator
+            ->expects()
+            ->validateAfterAll($closure);
 
         $this->config->setAfterAll($closure);
 
         $this->assertSame($closure, $this->config->getAfterAll());
-    }
-
-    #[Test]
-    #[Depends('afterAllSucceedsWithClosure')]
-    public function afterAllSucceedsWithNull(): void
-    {
-        // Assert that afterAll can be set using a valid closure.
-
-        $closure = $this->goodClosure();
-
-        $this->config->setAfterAll($closure);
-        $this->config->setAfterAll(null);
-
-        $this->assertNull($this->config->getAfterAll());
-    }
-
-    #[Test]
-    #[DataProvider('providerBadClosures')]
-    #[Depends('afterAllSucceedsWithClosure')]
-    public function afterAllFails(Closure $closure): void
-    {
-        // Assert that afterAll fails if provided with an invalid closure.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('afterAll(): cannot have any parameters.');
-
-        $this->config->setAfterAll($closure);
     }
 
     #[Test]
@@ -123,43 +80,20 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[Depends('beforeEachDefault')]
-    public function beforeEachSucceedsWithClosure(): void
+    public function beforeEachCanBeSet(): void
     {
-        // Assert that beforeEach can be set using a valid closure.
+        // Assert that beforeEach can be set and calls the validator.
 
-        $closure = $this->goodClosure();
+        $closure = $this->closure();
+
+        $this
+            ->validator
+            ->expects()
+            ->validateBeforeEach($closure);
 
         $this->config->setBeforeEach($closure);
 
         $this->assertSame($closure, $this->config->getBeforeEach());
-    }
-
-    #[Test]
-    #[Depends('beforeEachSucceedsWithClosure')]
-    public function beforeEachSucceedsWithNull(): void
-    {
-        // Assert that beforeEach can be set using a valid closure.
-
-        $closure = $this->goodClosure();
-
-        $this->config->setBeforeEach($closure);
-        $this->config->setBeforeEach(null);
-
-        $this->assertNull($this->config->getBeforeEach());
-    }
-
-    #[Test]
-    #[DataProvider('providerBadClosures')]
-    #[Depends('beforeEachSucceedsWithClosure')]
-    public function beforeEachFails(Closure $closure): void
-    {
-        // Assert that beforeEach fails if provided with an invalid closure.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('beforeEach(): cannot have any parameters.');
-
-        $this->config->setBeforeEach($closure);
     }
 
     #[Test]
@@ -171,43 +105,20 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[Depends('afterEachDefault')]
-    public function afterEachSucceedsWithClosure(): void
+    public function afterEachCanBeSet(): void
     {
-        // Assert that afterEach can be set using a valid closure.
+        // Assert that afterEach can be set and calls the validator.
 
-        $closure = $this->goodClosure();
+        $closure = $this->closure();
+
+        $this
+            ->validator
+            ->expects()
+            ->validateAfterEach($closure);
 
         $this->config->setAfterEach($closure);
 
         $this->assertSame($closure, $this->config->getAfterEach());
-    }
-
-    #[Test]
-    #[Depends('afterEachSucceedsWithClosure')]
-    public function afterEachSucceedsWithNull(): void
-    {
-        // Assert that afterEach can be set using a valid closure.
-
-        $closure = $this->goodClosure();
-
-        $this->config->setAfterEach($closure);
-        $this->config->setAfterEach(null);
-
-        $this->assertNull($this->config->getAfterEach());
-    }
-
-    #[Test]
-    #[DataProvider('providerBadClosures')]
-    #[Depends('afterEachSucceedsWithClosure')]
-    public function afterEachFails(Closure $closure): void
-    {
-        // Assert that afterEach fails if provided with an invalid closure.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('afterEach(): cannot have any parameters.');
-
-        $this->config->setAfterEach($closure);
     }
 
     #[Test]
@@ -219,28 +130,18 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('providerGoodInts')]
-    #[Depends('averageOfDefault')]
-    public function averageOfSucceeds(int $averageOf): void
+    public function averageOfCanBeSet(): void
     {
-        // Assert that averageOf can be set to a positive integer.
+        // Assert that averageOf can be set and calls the validator.
 
-        $this->config->setAverageOf($averageOf);
+        $this
+            ->validator
+            ->expects()
+            ->validateAverageOf(123);
 
-        $this->assertSame($averageOf, $this->config->getAverageOf());
-    }
+        $this->config->setAverageOf(123);
 
-    #[Test]
-    #[DataProvider('providerBadInts')]
-    #[Depends('averageOfSucceeds')]
-    public function averageOfFails(int $averageOf): void
-    {
-        // Assert that averageOf cannot be set to a non-positive integer.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('averageOf(): cannot be less than 1.');
-
-        $this->config->setAverageOf($averageOf);
+        $this->assertSame(123, $this->config->getAverageOf());
     }
 
     #[Test]
@@ -252,80 +153,29 @@ class ConfigTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('providerGoodInts')]
-    #[Depends('perRunDefault')]
-    public function perRunSucceeds(int $perRun): void
+    public function perRunCanBeSet(): void
     {
-        // Assert that perRun can be set to a positive integer.
+        // Assert that perRun can be set and calls the validator.
 
-        $this->config->setPerRun($perRun);
+        $this
+            ->validator
+            ->expects()
+            ->validatePerRun(123);
 
-        $this->assertSame($perRun, $this->config->getPerRun());
-    }
+        $this->config->setPerRun(123);
 
-    #[Test]
-    #[DataProvider('providerBadInts')]
-    #[Depends('perRunSucceeds')]
-    public function perRunOfFails(int $perRun): void
-    {
-        // Assert that perRun cannot be set to a non-positive integer.
-
-        $this->expectException(ConfigException::class);
-        $this->expectExceptionMessage('perRun(): cannot be less than 1.');
-
-        $this->config->setPerRun($perRun);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function providerBadClosures(): array
-    {
-        return [
-            [fn (string $str): string => $str],
-            [fn (int $i = 0): int => $i],
-            [fn (int $i): int => $i],
-            [fn (string $str) => $str],
-            [fn (int $i = 0) => $i],
-            [fn (int $i) => $i],
-            [fn ($i) => $i],
-        ];
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function providerGoodInts(): array
-    {
-        return [
-            [1],
-            [2],
-            [3],
-            [100],
-        ];
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function providerBadInts(): array
-    {
-        return [
-            [0],
-            [-1],
-            [-2],
-            [-100],
-        ];
+        $this->assertSame(123, $this->config->getPerRun());
     }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->config = new Config;
+        $this->validator = Mockery::mock(Validator::class);
+        $this->config = new Config($this->validator);
     }
 
-    private function goodClosure(): Closure
+    private function closure(): Closure
     {
         return function (): void {
             // do nothing.
