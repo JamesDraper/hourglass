@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal\Timer;
+namespace Tests\Unit\Internal\Timer;
 
 use Hourglass\Internal\Timer\Timer;
 

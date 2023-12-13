@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal;
+namespace Tests\Unit\Internal;
 
-use Hourglass\Exception\GeneralException;
 use Hourglass\Internal\Timer\TimerInterface;
+use Hourglass\Exception\GeneralException;
 use Hourglass\Internal\Calculator;
 
 use Mockery\MockInterface;
@@ -17,8 +17,8 @@ use PHPUnit\Framework\TestCase;
 use LogicException;
 use Closure;
 
-use function func_get_args;
 use function array_shift;
+use function func_get_args;
 
 class CalculatorTest extends TestCase
 {

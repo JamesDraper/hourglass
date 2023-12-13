@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal;
+namespace Tests\Unit\Internal;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Hourglass\Exception\ConfigException;
 use Hourglass\Internal\Validator;
 
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 

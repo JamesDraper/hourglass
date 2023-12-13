@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Internal;
+namespace Tests\Unit\Internal;
 
 use Hourglass\Internal\BenchmarkInterface;
 use Hourglass\Internal\Validator;
