@@ -59,6 +59,27 @@ class Calculator
         );
     }
 
+    /**
+     * @throws GeneralException
+     */
+    public static function runConfig(Config $config): string
+    {
+        $calculator = self::make();
+
+        /** @var Closure(): void $benchmark */
+        $benchmark = $config->getBenchmark();
+
+        return $calculator(
+            $benchmark,
+            $config->getBeforeAll(),
+            $config->getAfterAll(),
+            $config->getBeforeEach(),
+            $config->getAfterEach(),
+            $config->getAverageOf(),
+            $config->getPerRun(),
+        );
+    }
+
     private static function make(): self
     {
         static $instance = null;
