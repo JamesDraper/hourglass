@@ -4,14 +4,18 @@ declare(strict_types=1);
 namespace Hourglass;
 
 use Hourglass\Exception\ConfigException;
+use Hourglass\Internal\Calculator;
 use Hourglass\Internal\Config;
 
 use Closure;
 
 use function is_null;
+use function sprintf;
 
 final class Builder
 {
+    private const FORMAT = '%s nanoseconds';
+
     public static function make(): self
     {
         $config = Config::make();
@@ -33,13 +37,15 @@ final class Builder
     /**
      * @throws ConfigException
      */
-    public function run(): self
+    public function run(): string
     {
         if (is_null($this->config->getBenchmark())) {
             throw new ConfigException('benchmark(): must be set.');
         }
 
-        return $this;
+        $nanoseconds = Calculator::runConfig($this->config);
+
+        return sprintf(self::FORMAT, $nanoseconds);
     }
 
     /**
